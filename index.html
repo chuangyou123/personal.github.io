@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winster - 创游世界增量创作者</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 初始加载动画 */
+        #initial-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 页面内容初始隐藏 */
+        .page-content {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .page-content.visible {
+            opacity: 1;
+        }
+        
+        /* 联系信息特殊样式 */
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .contact-info-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .contact-info-item.qq {
+            border-left-color: #12B7F5;
+        }
+        
+        .contact-info-item.qq-group {
+            border-left-color: #FF6B6B;
+        }
+        
+        .contact-info-item.github {
+            border-left-color: #333;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .contact-icon.qq-icon {
+            background: linear-gradient(135deg, #12B7F5, #0D9CDB);
+        }
+        
+        .contact-icon.qq-group-icon {
+            background: linear-gradient(135deg, #FF6B6B, #FF4757);
+        }
+        
+        .contact-icon.github-icon {
+            background: linear-gradient(135deg, #333, #000);
+        }
+        
+        .contact-details {
+            flex: 1;
+        }
+        
+        .contact-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .contact-details p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .contact-id {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        /* 添加渐变分隔线 */
+        .gradient-divider {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(106, 17, 203, 0.3), 
+                rgba(37, 117, 252, 0.3), 
+                transparent
+            );
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 极简加载动画 -->
+    <div id="initial-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Winster</div>
+    </div>
+
+    <div class="container page-content">
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="logo">Winster</div>
+            <nav class="nav">
+                <a href="#works" class="nav-link">作品</a>
+                <a href="#about" class="nav-link">关于</a>
+                <a href="#contact" class="nav-link">联系</a>
+            </nav>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main>
+            <!-- 英雄区域 -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="main-title">Winster</h1>
+                    <p class="subtitle">创游世界增量创作者</p>
+                    <div class="typewriter">
+                        <span class="typewriter-text">用代码创造无限可能</span>
+                    </div>
+                </div>
+                <div class="hero-decoration">
+                    <div class="floating-element floating-1"></div>
+                    <div class="floating-element floating-2"></div>
+                    <div class="floating-element floating-3"></div>
+                </div>
+            </section>
+
+            <!-- 作品展示区域 -->
+            <section id="works" class="works-section">
+                <h2 class="section-title">我的作品</h2>
+                <p class="section-subtitle">鼠标悬停在图片上查看效果</p>
+                
+                <div class="works-container" id="works-container">
+                    <!-- 作品会通过JavaScript动态加载到这里 -->
+                </div>
+
+                <!-- 加载指示器 -->
+                <div class="loader" id="loader">
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                </div>
+
+                <p class="works-tip">
+                    <i class="fas fa-lightbulb"></i> 提示：点击图片可查看大图
+                </p>
+            </section>
+
+            <!-- 关于我区域 -->
+            <section id="about" class="about-section">
+                <h2 class="section-title">关于我</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>我是Winster，一个专注于创游世界的增量游戏开发者。</p>
+                        <p>我热爱创造数值增长的游戏体验，从简单的点击游戏到复杂的增量系统，每一行代码都在讲述一个成长的故事。</p>
+                        <p>我相信在图形化编程与像素艺术的完美结合中，能够创造出令人沉迷的游戏世界。</p>
+                        <p>大数库是我探索无限可能性的工具，而游戏设计则是我表达创造力的语言。</p>
+                    </div>
+                    <div class="skills">
+                        <div class="skill-tag" data-tooltip="创游世界 - 创造属于你的游戏宇宙">创游世界</div>
+                        <div class="skill-tag" data-tooltip="增量游戏 - 从小开始，无限成长">增量游戏</div>
+                        <div class="skill-tag" data-tooltip="图形化编程 - 可视化创造游戏逻辑">图形化编程</div>
+                        <div class="skill-tag" data-tooltip="像素艺术 - 用像素讲述故事">像素艺术</div>
+                        <div class="skill-tag" data-tooltip="大数库 - 处理宇宙级别的数字">大数库</div>
+                        <div class="skill-tag" data-tooltip="游戏设计 - 创造令人着迷的游戏体验">游戏设计</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 联系区域 -->
+            <section id="contact" class="contact-section">
+                <h2 class="section-title">联系我</h2>
+                <div class="contact-content">
+                    <p>想要一起创造有趣的游戏世界？随时联系我！</p>
+                    
+                    <div class="contact-info">
+                        <!-- QQ -->
+                        <div class="contact-info-item qq">
+                            <div class="contact-icon qq-icon">
+                                <i class="fab fa-qq"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>QQ</h3>
+                                <p>个人QQ号</p>
+                                <div class="contact-id">418501074</div>
+                            </div>
+                        </div>
+                        
+                        <!-- QQ群 -->
+                        <div class="contact-info-item qq-group">
+                            <div class="contact-icon qq-group-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>QQ群</h3>
+                                <p>加入我的QQ群，一起交流游戏开发</p>
+                                <div class="contact-id">1078642049</div>
+                            </div>
+                        </div>
+                        
+                        <!-- GitHub -->
+                        <div class="contact-info-item github">
+                            <div class="contact-icon github-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>GitHub</h3>
+                                <p>查看我的代码项目</p>
+                                <div class="contact-id">暂未填写</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-tips">
+                        <p><i class="fas fa-info-circle"></i> 欢迎通过QQ或QQ群联系我，一起讨论游戏开发！</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 渐变分隔线 -->
+            <div class="gradient-divider"></div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">Winster</div>
+                <p class="footer-tagline">创游世界 · 增量游戏 · 图形化编程</p>
+                <div class="footer-links">
+                    <a href="#works">作品</a>
+                    <span class="separator">|</span>
+                    <a href="#about">关于</a>
+                    <span class="separator">|</span>
+                    <a href="#contact">联系</a>
+                </div>
+                <p class="footer-copyright">© 2026 Winster. 保留所有权利。</p>
+                <p class="footer-note">用❤️创造，用🎮连接</p>
+            </div>
+        </footer>
+
+        <!-- 图片模态框 -->
+        <div class="modal" id="imageModal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeModal">&times;</span>
+                <img id="modalImage" src="" alt="作品大图">
+                <div class="modal-info">
+                    <h3 id="modalTitle">作品标题</h3>
+                    <p id="modalDescription">作品描述</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
