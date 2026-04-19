@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打破永恒 - 创游世界大数库教程</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="tutorial_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 教程页面专属样式 */
+        .tutorial-container {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+        
+        /* 左侧目录 */
+        .tutorial-sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .tutorial-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .tutorial-subtitle {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .nav-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: rgba(106, 17, 203, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 10px 12px 10px 20px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item:hover {
+            background: rgba(106, 17, 203, 0.05);
+            color: #6a11cb;
+            transform: translateX(5px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(106, 17, 203, 0.1), transparent);
+            color: #6a11cb;
+            font-weight: 500;
+            border-left: 3px solid #6a11cb;
+        }
+        
+        .nav-item::before {
+            content: '›';
+            position: absolute;
+            left: 8px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* 右侧内容 */
+        .tutorial-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+        
+        .content-header {
+            margin-bottom: 40px;
+        }
+        
+        .chapter-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .chapter-progress {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            width: 0;
+            transition: width 1s ease;
+        }
+        
+        .progress-text {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* 教程卡片 */
+        .tutorial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tutorial-card-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(106, 17, 203, 0.1);
+        }
+        
+        .card-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-title-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 图片内容 */
+        .tutorial-image-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tutorial-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .image-wrapper:hover .tutorial-image {
+            transform: scale(1.02);
+        }
+        
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 20px;
+            font-size: 1.1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-wrapper:hover .image-caption {
+            transform: translateY(0);
+        }
+        
+        /* 内容区域 */
+        .content-section {
+            margin: 30px 0;
+        }
+        
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        
+        .content-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .content-list li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: #444;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .content-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #6a11cb;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        /* 导航按钮 */
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.2);
+        }
+        
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .nav-button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .tutorial-sidebar {
+                width: 250px;
+            }
+            
+            .tutorial-content {
+                margin-left: 250px;
+                padding: 30px 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .tutorial-container {
+                flex-direction: column;
+            }
+            
+            .tutorial-sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            
+            .tutorial-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .chapter-title {
+                font-size: 2.2rem;
+            }
+            
+            .tutorial-card {
+                padding: 25px;
+            }
+            
+            .card-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 初始加载动画 -->
+    <div id="initial-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">打破永恒</div>
+    </div>
+
+    <div class="tutorial-container page-content">
+        <!-- 左侧目录 -->
+        <nav class="tutorial-sidebar">
+            <div class="sidebar-header">
+                <h1 class="tutorial-title">打破永恒</h1>
+                <p class="tutorial-subtitle">创游世界大数库完全教程<br>从基础到高级，掌握无限数值计算</p>
+            </div>
+            
+            <div class="sidebar-nav" id="tutorialNav">
+                <!-- 目录会通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="progress-info">
+                    <div class="progress-text">学习进度: <span id="progressPercent">0%</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="sidebarProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 右侧内容 -->
+        <main class="tutorial-content">
+            <!-- 章节头部 -->
+            <header class="content-header">
+                <h1 class="chapter-title" id="chapterTitle">欢迎学习打破永恒</h1>
+                <p class="chapter-subtitle" id="chapterSubtitle">选择左侧目录开始学习</p>
+                
+                <div class="chapter-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="contentProgress"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0/28 已完成</div>
+                </div>
+            </header>
+
+            <!-- 教程内容容器 -->
+            <div id="tutorialContent">
+                <!-- 内容会通过JavaScript动态加载 -->
+                <div class="tutorial-card">
+                    <div class="tutorial-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="fas fa-infinity"></i>
+                            </div>
+                            打破永恒教程
+                        </h2>
+                        <p class="card-subtitle">欢迎来到创游世界的大数库教程！在这里，您将学习如何处理天文数字级的数值计算，掌握打破永恒的核心概念。</p>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3 class="section-heading">教程简介</h3>
+                        <p class="content-text">"打破永恒"是创游世界中一个强大的大数库，它允许您处理超出普通数值范围的数字。无论您是在开发增量游戏、科学计算工具，还是需要处理极大数值的应用，打破永恒都能为您提供强大的支持。</p>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3 class="section-heading">学习路径</h3>
+                        <ul class="content-list">
+                            <li><strong>基本操作</strong> - 学习大数的基本表示和转换</li>
+                            <li><strong>运算操作</strong> - 掌握各种数学运算和函数</li>
+                            <li><strong>计数法</strong> - 了解不同的数值表示方法</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3 class="section-heading">互动学习</h3>
+                        <p class="content-text">每个章节都包含互动示例和实际代码演示。您可以点击左侧目录中的任意主题开始学习。</p>
+                        
+                        <div class="tutorial-image-container">
+                            <div class="image-wrapper">
+                                <img src="../picture/tutorial/pictures/welcome.png" alt="打破永恒教程封面" class="tutorial-image">
+                                <div class="image-caption">开始您的无限数值计算之旅</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-nav">
+                        <button class="nav-button" onclick="startLearning()">
+                            <i class="fas fa-play"></i> 开始学习
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+    // 教程数据结构
+    const tutorialData = {
+        chapters: [
+            {
+                id: 'basic',
+                title: '基本',
+                items: [
+                    { id: 'format', title: 'format', textFile: 'basic/format.txt' },
+                    { id: 'to-big-number', title: 'to big number', textFile: 'basic/to_big_number.txt' },
+                    { id: 'patch', title: '补丁', textFile: 'basic/patch.txt' }
+                ]
+            },
+            {
+                id: 'arithmetic',
+                title: '运算',
+                items: [
+                    { id: 'add', title: '加', textFile: 'arithmetic/add.txt' },
+                    { id: 'subtract', title: '减', textFile: 'arithmetic/subtract.txt' },
+                    { id: 'multiply', title: '乘', textFile: 'arithmetic/multiply.txt' },
+                    { id: 'divide', title: '除', textFile: 'arithmetic/divide.txt' },
+                    { id: 'power', title: '乘方', textFile: 'arithmetic/power.txt' },
+                    { id: 'sqrt', title: '开方', textFile: 'arithmetic/sqrt.txt' },
+                    { id: 'log', title: 'log', textFile: 'arithmetic/log.txt' },
+                    { id: 'slog', title: 'slog', textFile: 'arithmetic/slog.txt' },
+                    { id: 'ln', title: 'ln', textFile: 'arithmetic/ln.txt' },
+                    { id: 'exp', title: 'e^', textFile: 'arithmetic/exp.txt' },
+                    { id: 'factorial', title: '!', textFile: 'arithmetic/factorial.txt' },
+                    { id: 'factorial-power', title: '^!', textFile: 'arithmetic/factorial_power.txt' },
+                    { id: 'tetration', title: '^^', textFile: 'arithmetic/tetration.txt' },
+                    { id: 'max', title: 'max', textFile: 'arithmetic/max.txt' },
+                    { id: 'min', title: 'min', textFile: 'arithmetic/min.txt' },
+                    { id: 'floor', title: '向下取整', textFile: 'arithmetic/floor.txt' },
+                    { id: 'ceil', title: '向上取整', textFile: 'arithmetic/ceil.txt' },
+                    { id: 'round', title: '保留小数', textFile: 'arithmetic/round.txt' },
+                    { id: 'random', title: 'random', textFile: 'arithmetic/random.txt' }
+                ]
+            },
+            {
+                id: 'counting',
+                title: '计数法',
+                items: [
+                    { id: 'universal-counting', title: '万能计数法', textFile: 'counting/universal.txt' },
+                    { id: 'f-exponent', title: 'F指数', textFile: 'counting/f_exponent.txt' },
+                    { id: 'time-counting', title: '时间计数法', textFile: 'counting/time.txt' },
+                    { id: 'blank-counting', title: '空白计数法', textFile: 'counting/blank.txt' },
+                    { id: 'unknown-counting', title: '？？？计数法', textFile: 'counting/unknown.txt' },
+                    { id: 'power2-counting', title: '2^', textFile: 'counting/power2.txt' },
+                    { id: 'infinite-counting', title: '无限计数法', textFile: 'counting/infinite.txt' },
+                    { id: 'log-counting', title: '对数计数法', textFile: 'counting/logarithmic.txt' },
+                    { id: 'kmbt-counting', title: 'KMBT计数法', textFile: 'counting/kmbt.txt' },
+                    { id: 'base64-counting', title: 'base64计数法', textFile: 'counting/base64.txt' },
+                    { id: 'trillion-counting', title: '万亿计数法', textFile: 'counting/trillion.txt' },
+                    { id: 'scientific-counting', title: 'a*10^b计数法', textFile: 'counting/scientific.txt' }
+                ]
+            }
+        ],
+        totalItems: 0
+    };
+
+    // 学习进度
+    let progress = {
+        completed: 0,
+        total: 0
+    };
+
+    class TutorialApp {
+        constructor() {
+            this.currentChapter = null;
+            this.currentItem = null;
+            this.init();
+        }
+
+        async init() {
+            console.log('📚 开始初始化教程页面...');
+            
+            // 计算总项目数
+            tutorialData.totalItems = tutorialData.chapters.reduce((total, chapter) => 
+                total + chapter.items.length, 0
+            );
+            progress.total = tutorialData.totalItems;
+            
+            // 隐藏初始加载动画
+            setTimeout(() => {
+                const initialLoader = document.getElementById('initial-loader');
+                if (initialLoader) {
+                    initialLoader.style.opacity = '0';
+                    setTimeout(() => {
+                        initialLoader.style.display = 'none';
+                    }, 300);
+                }
+                
+                // 显示页面内容
+                const pageContent = document.querySelector('.page-content');
+                if (pageContent) {
+                    pageContent.classList.add('visible');
+                }
+            }, 500);
+            
+            // 初始化目录
+            this.renderNavigation();
+            
+            // 加载进度
+            this.loadProgress();
+            
+            // 初始化事件监听
+            this.initEventListeners();
+            
+            console.log('✅ 教程页面初始化完成！');
+        }
+
+        // 渲染导航目录
+        renderNavigation() {
+            const navContainer = document.getElementById('tutorialNav');
+            if (!navContainer) return;
+            
+            let navHTML = '';
+            
+            tutorialData.chapters.forEach((chapter, chapterIndex) => {
+                navHTML += `
+                    <div class="nav-section">
+                        <h3 class="section-title">${chapter.title}</h3>
+                        <div class="nav-items" id="nav-${chapter.id}">
+                `;
+                
+                chapter.items.forEach((item, itemIndex) => {
+                    const itemId = `${chapter.id}-${item.id}`;
+                    navHTML += `
+                        <a href="#" class="nav-item" data-chapter="${chapter.id}" data-item="${item.id}" id="nav-${itemId}">
+                            ${item.title}
+                        </a>
+                    `;
+                });
+                
+                navHTML += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            navContainer.innerHTML = navHTML;
+        }
+
+        // 初始化事件监听
+        initEventListeners() {
+            // 导航点击事件
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-item')) {
+                    e.preventDefault();
+                    const chapterId = e.target.dataset.chapter;
+                    const itemId = e.target.dataset.item;
+                    this.loadTutorialItem(chapterId, itemId);
+                }
+            });
+            
+            // 导航按钮事件
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('prev-btn')) {
+                    this.navigatePrevious();
+                }
+                if (e.target.classList.contains('next-btn')) {
+                    this.navigateNext();
+                }
+            });
+        }
+
+        // 加载教程内容
+        async loadTutorialItem(chapterId, itemId) {
+            try {
+                // 找到对应的教程项
+                const chapter = tutorialData.chapters.find(c => c.id === chapterId);
+                if (!chapter) {
+                    console.error(`找不到章节: ${chapterId}`);
+                    return;
+                }
+                
+                const item = chapter.items.find(i => i.id === itemId);
+                if (!item) {
+                    console.error(`找不到教程项: ${itemId} 在章节 ${chapterId}`);
+                    return;
+                }
+                
+                this.currentChapter = chapter;
+                this.currentItem = item;
+                
+                // 更新导航激活状态
+                this.updateNavActiveState(chapterId, itemId);
+                
+                // 加载文本内容
+                const content = await this.loadTextContent(item.textFile);
+                
+                // 解析内容格式
+                const parsedContent = this.parseContent(content, chapterId, itemId);
+                
+                // 渲染教程内容
+                this.renderTutorialContent(parsedContent, chapter, item);
+                
+                // 更新进度
+                this.updateProgress(chapterId, itemId);
+                
+            } catch (error) {
+                console.error('❌ 加载教程内容失败:', error);
+                this.showError('加载教程内容失败，请刷新页面重试');
+            }
+        }
+
+        // 加载文本内容
+        async loadTextContent(filePath) {
+            try {
+                console.log(`📁 加载文件: text/tutorial/Break eternity/${filePath}`);
+                const response = await fetch(`../text/tutorial/Break eternity/${filePath}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP错误! 状态: ${response.status}`);
+                }
+                
+                return await response.text();
+            } catch (error) {
+                console.warn(`⚠️ 无法加载文件: ${filePath}`, error);
+                return this.getDefaultContent();
+            }
+        }
+
+        // 解析内容格式
+        parseContent(content, chapterId, itemId) {
+            const lines = content.split('\n').filter(line => line.trim());
+            const result = {
+                title: '',
+                subtitle: '',
+                sections: [],
+                image: null
+            };
+            
+            // 第一行通常是标题
+            if (lines.length > 0) {
+                const firstLine = lines[0].trim();
+                if (firstLine.includes('/')) {
+                    const parts = firstLine.split('/');
+                    if (parts.length >= 2) {
+                        result.title = parts[0].trim();
+                        result.image = parts[1].trim();
+                        if (parts.length >= 3) {
+                            result.subtitle = parts.slice(2).join('/').trim();
+                        }
+                    } else {
+                        result.title = firstLine;
+                    }
+                } else {
+                    result.title = firstLine;
+                }
+            }
+            
+            // 解析其他行作为内容
+            let currentSection = null;
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line.startsWith('# ')) {
+                    // 新章节
+                    if (currentSection) {
+                        result.sections.push(currentSection);
+                    }
+                    currentSection = {
+                        title: line.substring(2).trim(),
+                        content: [],
+                        code: []
+                    };
+                } else if (line.startsWith('```')) {
+                    // 代码块开始或结束
+                    if (currentSection) {
+                        if (line === '```') {
+                            // 代码块结束
+                            currentSection.content.push({ type: 'code_end' });
+                        } else {
+                            // 代码块开始
+                            currentSection.content.push({ type: 'code_start' });
+                        }
+                    }
+                } else if (line.startsWith('- ') || line.startsWith('* ')) {
+                    // 列表项
+                    if (currentSection) {
+                        currentSection.content.push({ 
+                            type: 'list_item', 
+                            text: line.substring(2).trim() 
+                        });
+                    }
+                } else {
+                    // 普通文本
+                    if (currentSection) {
+                        if (currentSection.content.length > 0 && 
+                            currentSection.content[currentSection.content.length - 1].type === 'text') {
+                            // 续接上一段文本
+                            currentSection.content[currentSection.content.length - 1].text += ' ' + line;
+                        } else {
+                            currentSection.content.push({ 
+                                type: 'text', 
+                                text: line 
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // 添加最后一个章节
+            if (currentSection) {
+                result.sections.push(currentSection);
+            }
+            
+            // 如果没有图片，使用默认图片
+            if (!result.image) {
+                result.image = this.getDefaultImage(chapterId, itemId);
+            }
+            
+            return result;
+        }
+
+        // 获取默认内容
+        getDefaultContent() {
+            return `欢迎学习本教程/placeholder/这是教程的默认内容
+# 介绍
+这是关于本教程的详细介绍内容。
+
+# 使用方法
+- 列表项1
+- 列表项2
+- 列表项3
+
+# 代码示例
+\`\`\`
+// 示例代码
+function example() {
+    console.log("Hello World!");
+}
+\`\`\`
+
+# 总结
+这是教程的总结部分。`;
+        }
+
+        // 获取默认图片
+        getDefaultImage(chapterId, itemId) {
+            const imageMap = {
+                'basic': {
+                    'format': 'basic_format',
+                    'to-big-number': 'basic_to_big_number',
+                    'patch': 'basic_patch'
+                },
+                'arithmetic': {
+                    'add': 'arithmetic_add',
+                    'subtract': 'arithmetic_subtract',
+                    'multiply': 'arithmetic_multiply',
+                    'divide': 'arithmetic_divide',
+                    'power': 'arithmetic_power',
+                    'sqrt': 'arithmetic_sqrt',
+                    'log': 'arithmetic_log',
+                    'slog': 'arithmetic_slog',
+                    'ln': 'arithmetic_ln',
+                    'exp': 'arithmetic_exp',
+                    'factorial': 'arithmetic_factorial',
+                    'factorial-power': 'arithmetic_factorial_power',
+                    'tetration': 'arithmetic_tetration',
+                    'max': 'arithmetic_max',
+                    'min': 'arithmetic_min',
+                    'floor': 'arithmetic_floor',
+                    'ceil': 'arithmetic_ceil',
+                    'round': 'arithmetic_round',
+                    'random': 'arithmetic_random'
+                },
+                'counting': {
+                    'universal-counting': 'counting_universal',
+                    'f-exponent': 'counting_f_exponent',
+                    'time-counting': 'counting_time',
+                    'blank-counting': 'counting_blank',
+                    'unknown-counting': 'counting_unknown',
+                    'power2-counting': 'counting_power2',
+                    'infinite-counting': 'counting_infinite',
+                    'log-counting': 'counting_log',
+                    'kmbt-counting': 'counting_kmbt',
+                    'base64-counting': 'counting_base64',
+                    'trillion-counting': 'counting_trillion',
+                    'scientific-counting': 'counting_scientific'
+                }
+            };
+            
+            return imageMap[chapterId]?.[itemId] || 'placeholder';
+        }
+
+        // 渲染教程内容
+        renderTutorialContent(parsedContent, chapter, item) {
+            const contentContainer = document.getElementById('tutorialContent');
+            if (!contentContainer) return;
+            
+            // 更新章节标题
+            document.getElementById('chapterTitle').textContent = item.title;
+            document.getElementById('chapterSubtitle').textContent = `${chapter.title} - ${parsedContent.subtitle || item.title}`;
+            
+            // 构建HTML
+            let contentHTML = `
+                <div class="tutorial-card">
+                    <div class="tutorial-card-header">
+                        <h2 class="card-title">
+                            <div class="card-title-icon">
+                                <i class="${this.getChapterIcon(chapter.id)}"></i>
+                            </div>
+                            ${parsedContent.title || item.title}
+                        </h2>
+                        <p class="card-subtitle">${parsedContent.subtitle || `${chapter.title} - ${item.title} 教程`}</p>
+                    </div>
+            `;
+            
+            // 添加图片
+            if (parsedContent.image) {
+                const imagePath = `../picture/tutorial/pictures/${parsedContent.image}.png`;
+                contentHTML += `
+                    <div class="tutorial-image-container">
+                        <div class="image-wrapper">
+                            <img src="${imagePath}" alt="${parsedContent.title || item.title}" 
+                                 class="tutorial-image" onerror="this.src='../picture/tutorial/pictures/placeholder.png'">
+                            <div class="image-caption">${parsedContent.title || item.title}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 添加内容章节
+            if (parsedContent.sections.length > 0) {
+                parsedContent.sections.forEach((section, index) => {
+                    contentHTML += `
+                        <div class="content-section">
+                            <h3 class="section-heading">${section.title}</h3>
+                    `;
+                    
+                    let inCodeBlock = false;
+                    let codeContent = [];
+                    
+                    section.content.forEach(content => {
+                        switch (content.type) {
+                            case 'text':
+                                if (!inCodeBlock) {
+                                    contentHTML += `<p class="content-text">${content.text}</p>`;
+                                } else {
+                                    codeContent.push(content.text);
+                                }
+                                break;
+                                
+                            case 'list_item':
+                                if (!inCodeBlock) {
+                                    if (!contentHTML.includes('<ul class="content-list">')) {
+                                        contentHTML += '<ul class="content-list">';
+                                    }
+                                    contentHTML += `<li>${content.text}</li>`;
+                                } else {
+                                    codeContent.push(content.text);
+                                }
+                                break;
+                                
+                            case 'code_start':
+                                inCodeBlock = true;
+                                codeContent = [];
+                                break;
+                                
+                            case 'code_end':
+                                inCodeBlock = false;
+                                if (codeContent.length > 0) {
+                                    contentHTML += `
+                                        <div class="code-block">
+                                            <pre><code>${codeContent.join('\n')}</code></pre>
+                                        </div>
+                                    `;
+                                }
+                                break;
+                        }
+                    });
+                    
+                    // 关闭列表
+                    if (contentHTML.includes('<ul class="content-list">') && 
+                        !contentHTML.includes('</ul>')) {
+                        contentHTML += '</ul>';
+                    }
+                    
+                    contentHTML += `</div>`;
+                });
+            } else {
+                // 默认内容
+                contentHTML += `
+                    <div class="content-section">
+                        <h3 class="section-heading">教程内容</h3>
+                        <p class="content-text">这里将详细介绍 ${item.title} 的相关知识。</p>
+                        
+                        <h4 class="section-heading">主要功能</h4>
+                        <ul class="content-list">
+                            <li>功能特性1</li>
+                            <li>功能特性2</li>
+                            <li>功能特性3</li>
+                        </ul>
+                        
+                        <h4 class="section-heading">使用示例</h4>
+                        <div class="code-block">
+                            <pre><code>// ${item.title} 示例代码
+// 在这里添加示例代码</code></pre>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 添加导航按钮
+            const navButtons = this.getNavigationButtons();
+            contentHTML += `
+                <div class="tutorial-nav">
+                    ${navButtons.prev}
+                    ${navButtons.next}
+                </div>
+            </div>
+            `;
+            
+            contentContainer.innerHTML = contentHTML;
+            
+            // 添加淡入动画
+            setTimeout(() => {
+                const card = contentContainer.querySelector('.tutorial-card');
+                if (card) {
+                    card.style.animation = 'fadeInUp 0.8s ease forwards';
+                }
+            }, 10);
+        }
+
+        // 获取章节图标
+        getChapterIcon(chapterId) {
+            const icons = {
+                'basic': 'fas fa-cogs',
+                'arithmetic': 'fas fa-calculator',
+                'counting': 'fas fa-infinity'
+            };
+            return icons[chapterId] || 'fas fa-book';
+        }
+
+        // 获取导航按钮
+        getNavigationButtons() {
+            if (!this.currentChapter || !this.currentItem) {
+                return {
+                    prev: '<button class="nav-button prev-btn" disabled><i class="fas fa-arrow-left"></i> 上一节</button>',
+                    next: '<button class="nav-button next-btn"><i class="fas fa-arrow-right"></i> 下一节</button>'
+                };
+            }
+            
+            // 查找当前章节和项目索引
+            const chapterIndex = tutorialData.chapters.findIndex(c => c.id === this.currentChapter.id);
+            const itemIndex = this.currentChapter.items.findIndex(i => i.id === this.currentItem.id);
+            
+            // 上一节
+            let prevChapter = this.currentChapter;
+            let prevItem = null;
+            if (itemIndex > 0) {
+                prevItem = this.currentChapter.items[itemIndex - 1];
+            } else if (chapterIndex > 0) {
+                prevChapter = tutorialData.chapters[chapterIndex - 1];
+                prevItem = prevChapter.items[prevChapter.items.length - 1];
+            }
+            
+            const prevBtn = prevItem 
+                ? `<button class="nav-button prev-btn" onclick="tutorialApp.loadTutorialItem('${prevChapter.id}', '${prevItem.id}')">
+                      <i class="fas fa-arrow-left"></i> 上一节
+                   </button>`
+                : '<button class="nav-button prev-btn" disabled><i class="fas fa-arrow-left"></i> 上一节</button>';
+            
+            // 下一节
+            let nextChapter = this.currentChapter;
+            let nextItem = null;
+            if (itemIndex < this.currentChapter.items.length - 1) {
+                nextItem = this.currentChapter.items[itemIndex + 1];
+            } else if (chapterIndex < tutorialData.chapters.length - 1) {
+                nextChapter = tutorialData.chapters[chapterIndex + 1];
+                nextItem = nextChapter.items[0];
+            }
+            
+            const nextBtn = nextItem 
+                ? `<button class="nav-button next-btn" onclick="tutorialApp.loadTutorialItem('${nextChapter.id}', '${nextItem.id}')">
+                      <i class="fas fa-arrow-right"></i> 下一节
+                   </button>`
+                : '<button class="nav-button next-btn" disabled><i class="fas fa-arrow-right"></i> 下一节</button>';
+            
+            return { prev: prevBtn, next: nextBtn };
+        }
+
+        // 导航到上一节
+        navigatePrevious() {
+            if (!this.currentChapter || !this.currentItem) return;
+            
+            const chapterIndex = tutorialData.chapters.findIndex(c => c.id === this.currentChapter.id);
+            const itemIndex = this.currentChapter.items.findIndex(i => i.id === this.currentItem.id);
+            
+            if (itemIndex > 0) {
+                const prevItem = this.currentChapter.items[itemIndex - 1];
+                this.loadTutorialItem(this.currentChapter.id, prevItem.id);
+            } else if (chapterIndex > 0) {
+                const prevChapter = tutorialData.chapters[chapterIndex - 1];
+                const prevItem = prevChapter.items[prevChapter.items.length - 1];
+                this.loadTutorialItem(prevChapter.id, prevItem.id);
+            }
+        }
+
+        // 导航到下一节
+        navigateNext() {
+            if (!this.currentChapter || !this.currentItem) return;
+            
+            const chapterIndex = tutorialData.chapters.findIndex(c => c.id === this.currentChapter.id);
+            const itemIndex = this.currentChapter.items.findIndex(i => i.id === this.currentItem.id);
+            
+            if (itemIndex < this.currentChapter.items.length - 1) {
+                const nextItem = this.currentChapter.items[itemIndex + 1];
+                this.loadTutorialItem(this.currentChapter.id, nextItem.id);
+            } else if (chapterIndex < tutorialData.chapters.length - 1) {
+                const nextChapter = tutorialData.chapters[chapterIndex + 1];
+                const nextItem = nextChapter.items[0];
+                this.loadTutorialItem(nextChapter.id, nextItem.id);
+            }
+        }
+
+        // 更新导航激活状态
+        updateNavActiveState(chapterId, itemId) {
+            // 移除所有激活状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 添加当前激活状态
+            const activeNav = document.getElementById(`nav-${chapterId}-${itemId}`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+                
+                // 滚动到可见位置
+                activeNav.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // 更新进度
+        updateProgress(chapterId, itemId) {
+            // 获取当前项目索引
+            let completed = 0;
+            let foundCurrent = false;
+            
+            for (const chapter of tutorialData.chapters) {
+                for (const item of chapter.items) {
+                    if (!foundCurrent) {
+                        completed++;
+                        if (chapter.id === chapterId && item.id === itemId) {
+                            foundCurrent = true;
+                        }
+                    }
+                }
+            }
+            
+            progress.completed = Math.min(completed, progress.total);
+            this.saveProgress();
+            this.updateProgressUI();
+        }
+
+        // 更新进度UI
+        updateProgressUI() {
+            const percent = Math.round((progress.completed / progress.total) * 100);
+            
+            // 更新进度条
+            const sideProgress = document.getElementById('sidebarProgress');
+            const contentProgress = document.getElementById('contentProgress');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressText = document.getElementById('progressText');
+            
+            if (sideProgress) sideProgress.style.width = `${percent}%`;
+            if (contentProgress) contentProgress.style.width = `${percent}%`;
+            if (progressPercent) progressPercent.textContent = `${percent}%`;
+            if (progressText) progressText.textContent = `${progress.completed}/${progress.total} 已完成`;
+        }
+
+        // 保存进度
+        saveProgress() {
+            localStorage.setItem('tutorial_progress', JSON.stringify(progress));
+        }
+
+        // 加载进度
+        loadProgress() {
+            const saved = localStorage.getItem('tutorial_progress');
+            if (saved) {
+                try {
+                    const savedProgress = JSON.parse(saved);
+                    progress.completed = savedProgress.completed || 0;
+                } catch (e) {
+                    console.error('❌ 加载进度失败:', e);
+                }
+            }
+            this.updateProgressUI();
+        }
+
+        // 显示错误
+        showError(message) {
+            const contentContainer = document.getElementById('tutorialContent');
+            if (contentContainer) {
+                contentContainer.innerHTML = `
+                    <div class="tutorial-card">
+                        <div class="tutorial-card-header">
+                            <h2 class="card-title">
+                                <div class="card-title-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                加载失败
+                            </h2>
+                        </div>
+                        <div class="content-section">
+                            <p class="content-text">${message}</p>
+                            <button class="nav-button" onclick="window.location.reload()">
+                                <i class="fas fa-redo"></i> 重新加载
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    // 全局函数
+    function startLearning() {
+        // 从第一个章节的第一个项目开始
+        if (tutorialData.chapters.length > 0 && tutorialData.chapters[0].items.length > 0) {
+            const firstChapter = tutorialData.chapters[0];
+            const firstItem = firstChapter.items[0];
+            tutorialApp.loadTutorialItem(firstChapter.id, firstItem.id);
+        }
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('📄 教程页面已加载，开始初始化...');
+        window.tutorialApp = new TutorialApp();
+        
+        // 添加控制台欢迎信息
+        console.log('%c📚 打破永恒教程已加载！', 'color: #6a11cb; font-size: 16px; font-weight: bold;');
+        console.log('%c✨ 从基础到高级，掌握无限数值计算', 'color: #2575fc; font-size: 14px;');
+    });
+    </script>
+</body>
+</html>
